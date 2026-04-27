@@ -9,7 +9,7 @@ const Navigation = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: "white" },
+        contentStyle: { backgroundColor: "black" },
       }}
     >
       {userRoutes.map((route) => (
