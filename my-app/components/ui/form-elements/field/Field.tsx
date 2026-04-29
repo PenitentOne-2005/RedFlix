@@ -1,9 +1,9 @@
 import { TextInput, View, Text } from "react-native";
-import { Controller } from "react-hook-form";
+import { Controller, FieldValues } from "react-hook-form";
 import cn from "clsx";
 import { IField } from "./field.interface";
 
-const Field = <T extends Record<string, any>>({
+const Field = <T extends FieldValues>({
   control,
   rules,
   className,
