@@ -1,6 +1,12 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { IContext, TypeUserState } from "./auth.provider.interface";
+import {
+  getAccessToken,
+  getUserFromStorage,
+} from "@/services/auth/auth.helper";
+import { AuthService } from "@/services/auth/auth.service";
+import { setLogoutHandler } from "./authLogout";
 
 export const AuthContext = createContext({} as IContext);
 
@@ -10,11 +16,18 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
   const [user, setUser] = useState<TypeUserState>(null);
 
   useEffect(() => {
-    let mounted = true;
+    let isMounted = true;
 
     const checkAccessToken = async () => {
       try {
-      } catch (error) {
+        const accessToken = await getAccessToken();
+
+        if (accessToken) {
+          const user = await getUserFromStorage();
+
+          if (isMounted) setUser(user);
+        }
+      } catch (_) {
       } finally {
         await SplashScreen.hideAsync();
       }
@@ -23,8 +36,17 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
     checkAccessToken();
 
     return () => {
-      mounted = false;
+      isMounted = false;
     };
+  }, []);
+
+  const logout = async () => {
+    await AuthService.logout();
+    setUser(null);
+  };
+
+  useEffect(() => {
+    setLogoutHandler(logout);
   }, []);
 
   return (
