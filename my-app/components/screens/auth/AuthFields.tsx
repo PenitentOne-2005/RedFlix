@@ -29,6 +29,7 @@ const AuthFields = ({ control, isPassRequired }: IAuthFields) => {
       <Field<IAuthFormData>
         placeholder="Enter password"
         control={control}
+        secureTextEntry
         name="password"
         rules={
           isPassRequired
