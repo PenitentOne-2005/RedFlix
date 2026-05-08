@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Pressable, Text, View } from "react-native";
-import { Button, Loader, DismissKeyboard } from "@/components/ui";
 import { IAuthFormData } from "@/shared/types/auth.interface";
 import AuthFields from "./AuthFields";
 import { useAuthMutations } from "./useAuthMutations";
-import {
-  getAccessToken,
-  getUserFromStorage,
-} from "@/services/auth/auth.helper";
+import { Button, Loader, DismissKeyboard } from "@/components/ui";
 
 const Auth = () => {
   const [isReg, setIsReg] = useState(false);
@@ -40,28 +36,6 @@ const Auth = () => {
               <Button onPress={handleSubmit(onSubmit)} icon={"film"}>
                 Go to watch
               </Button>
-
-              <Pressable
-                onPress={async () => {
-                  const accessToken = await getAccessToken();
-                  console.log(accessToken);
-                }}
-              >
-                <Text className="text-white opacity-30 text-right text-base mt-3">
-                  show accessToken
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={async () => {
-                  const user = await getUserFromStorage();
-                  console.log(user);
-                }}
-              >
-                <Text className="text-white opacity-30 text-right text-base mt-3">
-                  show user
-                </Text>
-              </Pressable>
-
               <Pressable onPress={() => setIsReg(!isReg)}>
                 <Text className="text-white opacity-30 text-right text-base mt-3">
                   {isReg ? "Login" : "Register"}
