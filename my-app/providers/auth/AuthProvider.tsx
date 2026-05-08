@@ -15,6 +15,15 @@ SplashScreen.preventAutoHideAsync();
 const AuthProvider = ({ children }: PropsWithChildren<any>) => {
   const [user, setUser] = useState<TypeUserState>(null);
 
+  const logout = async () => {
+    await AuthService.logout();
+    setUser(null);
+  };
+
+  useEffect(() => {
+    setLogoutHandler(logout);
+  }, []);
+
   useEffect(() => {
     let isMounted = true;
 
@@ -25,9 +34,10 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
         if (accessToken) {
           const user = await getUserFromStorage();
 
-          if (isMounted) setUser(user);
+          if (isMounted) {
+            setUser(user);
+          }
         }
-      } catch (_) {
       } finally {
         await SplashScreen.hideAsync();
       }
@@ -38,15 +48,6 @@ const AuthProvider = ({ children }: PropsWithChildren<any>) => {
     return () => {
       isMounted = false;
     };
-  }, []);
-
-  const logout = async () => {
-    await AuthService.logout();
-    setUser(null);
-  };
-
-  useEffect(() => {
-    setLogoutHandler(logout);
   }, []);
 
   return (
