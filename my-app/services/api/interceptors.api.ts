@@ -28,7 +28,7 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
 
     if (
-      error.response.status === 401 ||
+      error.response?.status === 401 ||
       errorCatch(error) === "jwt expired" ||
       (errorCatch(error) === "jwt must be provided" &&
         error.config &&
@@ -40,10 +40,16 @@ instance.interceptors.response.use(
         await getNewTokens();
         return instance.request(originalRequest);
       } catch (error) {
-        if (errorCatch(error) === "jwt expired") await logout();
+        if (errorCatch(error) === "jwt expired") {
+          await logout();
+        }
+
+        return Promise.reject(error);
       }
     }
-  },
+
+    return Promise.reject(error);
+  }
 );
 
 export default instance;
